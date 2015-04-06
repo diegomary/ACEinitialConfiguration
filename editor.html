@@ -8,279 +8,41 @@
         body {
             overflow: hidden;
         }
-
         #editor {
-            width: 96%;
-            margin-left:2%;
-            margin-right:2%;
-            height: 500px;
+            width: 98%;
+            margin-left:1%;
+            margin-right:1%;
+            height:80vh;
         }
-
          #buttonContainer {
-            width:60%;          
-            margin-left:20%;
-            margin-right:20%;           
+            width:98%;          
+             margin-left:1%;
+            margin-right:1%;      
         }
-
-
     </style>
 </head>
 <body style="background-color:rgb(67,97,97)" onload="init()">
-    <div style="display:none" id="editor">
-        &lt;!--In order to use this configuration tool ACE is required.It is possible to download it from  https://github.com/ajaxorg/ace-builds/
-        Use the code below to create a simple editor with basic functionalities like Theme,Language and Font Size choice.--&gt;
+    <pre style="display:none" id="editor">
 
-        &lt;!DOCTYPE html&gt;
-        &lt;html lang=&quot;en&quot;&gt;
-        &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot;&gt;
-        &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;
-        &lt;title&gt;Editor&lt;/title&gt;
-        &lt;style type=&quot;text/css&quot; media=&quot;screen&quot;&gt;
-        body {overflow: hidden;}
-        #editor {width: 96%;margin-left:2%;margin-right:2%;height: 500px;}
-        #buttonContainer{width:60%;margin-left:20%;margin-right:20%;}
-        &lt;/style&gt;
-        &lt;/head&gt;
-        &lt;body onload=&quot;init()&quot;&gt;       
-        &lt;div style=&quot;display:none&quot; id=&quot;editor&quot;&gt;&lt;/div&gt;
-        &lt;div style=&quot;margin-top:1%;display:none;&quot; id=&quot;buttonContainer&quot;&gt;
-        &lt;!--Themes--&gt;
-        &lt;span&gt;Theme&amp;nbsp;&lt;/span&gt;       
-        &lt;select id=&quot;theme&quot; size=&quot;1&quot; onchange='changeTheme()'&gt;
-        &lt;optgroup label=&quot;Bright&quot;&gt;&lt;option value=&quot;ace/theme/chrome&quot;&gt;Chrome&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/clouds&quot;&gt;Clouds&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/crimson_editor&quot;&gt;Crimson Editor&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/dawn&quot;&gt;Dawn&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/dreamweaver&quot;&gt;Dreamweaver&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/eclipse&quot;&gt;Eclipse&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/github&quot;&gt;GitHub&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/solarized_light&quot;&gt;Solarized Light&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/textmate&quot;&gt;TextMate&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/tomorrow&quot;&gt;Tomorrow&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/xcode&quot;&gt;XCode&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/kuroir&quot;&gt;Kuroir&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/katzenmilch&quot;&gt;KatzenMilch&lt;/option&gt;
-        &lt;/optgroup&gt;
-        &lt;optgroup label=&quot;Dark&quot;&gt;&lt;option value=&quot;ace/theme/ambiance&quot;&gt;Ambiance&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/chaos&quot;&gt;Chaos&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/clouds_midnight&quot;&gt;Clouds Midnight&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/cobalt&quot;&gt;Cobalt&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/idle_fingers&quot;&gt;idle Fingers&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/kr_theme&quot;&gt;krTheme&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/merbivore&quot;&gt;Merbivore&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/merbivore_soft&quot;&gt;Merbivore Soft&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/mono_industrial&quot;&gt;Mono Industrial&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/monokai&quot;&gt;Monokai&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/pastel_on_dark&quot;&gt;Pastel on dark&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/solarized_dark&quot;&gt;Solarized Dark&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/terminal&quot;&gt;Terminal&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/tomorrow_night&quot;&gt;Tomorrow Night&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/tomorrow_night_blue&quot;&gt;Tomorrow Night Blue&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/tomorrow_night_bright&quot;&gt;Tomorrow Night Bright&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/tomorrow_night_eighties&quot;&gt;Tomorrow Night 80s&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/twilight&quot;&gt;Twilight&lt;/option&gt;
-        &lt;option value=&quot;ace/theme/vibrant_ink&quot;&gt;Vibrant Ink&lt;/option&gt;&lt;/optgroup&gt;
-        &lt;/select&gt;
-        &lt;!--Programming Languages--&gt;
-        &lt;span&gt;&amp;nbsp;Language&amp;nbsp;&lt;/span&gt;
-        &lt;select id=&quot;mode&quot; size=&quot;1&quot; onchange='changeMode()'&gt;
-        &lt;option value=&quot;abap&quot;&gt;ABAP&lt;/option&gt;
-        &lt;option value=&quot;abc&quot;&gt;ABC&lt;/option&gt;
-        &lt;option value=&quot;actionscript&quot;&gt;ActionScript&lt;/option&gt;
-        &lt;option value=&quot;ada&quot;&gt;ADA&lt;/option&gt;
-        &lt;option value=&quot;apache_conf&quot;&gt;Apache Conf&lt;/option&gt;
-        &lt;option value=&quot;asciidoc&quot;&gt;AsciiDoc&lt;/option&gt;
-        &lt;option value=&quot;assembly_x86&quot;&gt;Assembly x86&lt;/option&gt;
-        &lt;option value=&quot;autohotkey&quot;&gt;AutoHotKey&lt;/option&gt;
-        &lt;option value=&quot;batchfile&quot;&gt;BatchFile&lt;/option&gt;
-        &lt;option value=&quot;c9search&quot;&gt;C9Search&lt;/option&gt;
-        &lt;option value=&quot;c_cpp&quot;&gt;C and C++&lt;/option&gt;
-        &lt;option value=&quot;cirru&quot;&gt;Cirru&lt;/option&gt;
-        &lt;option value=&quot;clojure&quot;&gt;Clojure&lt;/option&gt;
-        &lt;option value=&quot;cobol&quot;&gt;Cobol&lt;/option&gt;
-        &lt;option value=&quot;coffee&quot;&gt;CoffeeScript&lt;/option&gt;
-        &lt;option value=&quot;coldfusion&quot;&gt;ColdFusion&lt;/option&gt;
-        &lt;option value=&quot;csharp&quot;&gt;C#&lt;/option&gt;
-        &lt;option value=&quot;css&quot;&gt;CSS&lt;/option&gt;
-        &lt;option value=&quot;curly&quot;&gt;Curly&lt;/option&gt;
-        &lt;option value=&quot;d&quot;&gt;D&lt;/option&gt;
-        &lt;option value=&quot;dart&quot;&gt;Dart&lt;/option&gt;
-        &lt;option value=&quot;diff&quot;&gt;Diff&lt;/option&gt;
-        &lt;option value=&quot;dockerfile&quot;&gt;Dockerfile&lt;/option&gt;
-        &lt;option value=&quot;dot&quot;&gt;Dot&lt;/option&gt;
-        &lt;option value=&quot;dummy&quot;&gt;Dummy&lt;/option&gt;
-        &lt;option value=&quot;dummysyntax&quot;&gt;DummySyntax&lt;/option&gt;
-        &lt;option value=&quot;eiffel&quot;&gt;Eiffel&lt;/option&gt;
-        &lt;option value=&quot;ejs&quot;&gt;EJS&lt;/option&gt;
-        &lt;option value=&quot;elixir&quot;&gt;Elixir&lt;/option&gt;
-        &lt;option value=&quot;elm&quot;&gt;Elm&lt;/option&gt;
-        &lt;option value=&quot;erlang&quot;&gt;Erlang&lt;/option&gt;
-        &lt;option value=&quot;forth&quot;&gt;Forth&lt;/option&gt;
-        &lt;option value=&quot;ftl&quot;&gt;FreeMarker&lt;/option&gt;
-        &lt;option value=&quot;gcode&quot;&gt;Gcode&lt;/option&gt;
-        &lt;option value=&quot;gherkin&quot;&gt;Gherkin&lt;/option&gt;
-        &lt;option value=&quot;gitignore&quot;&gt;Gitignore&lt;/option&gt;
-        &lt;option value=&quot;glsl&quot;&gt;Glsl&lt;/option&gt;
-        &lt;option value=&quot;golang&quot;&gt;Go&lt;/option&gt;
-        &lt;option value=&quot;groovy&quot;&gt;Groovy&lt;/option&gt;
-        &lt;option value=&quot;haml&quot;&gt;HAML&lt;/option&gt;
-        &lt;option value=&quot;handlebars&quot;&gt;Handlebars&lt;/option&gt;
-        &lt;option value=&quot;haskell&quot;&gt;Haskell&lt;/option&gt;
-        &lt;option value=&quot;haxe&quot;&gt;haXe&lt;/option&gt;
-        &lt;option value=&quot;html&quot;&gt;HTML&lt;/option&gt;
-        &lt;option value=&quot;html_ruby&quot;&gt;HTML (Ruby)&lt;/option&gt;
-        &lt;option value=&quot;ini&quot;&gt;INI&lt;/option&gt;
-        &lt;option value=&quot;io&quot;&gt;Io&lt;/option&gt;
-        &lt;option value=&quot;jack&quot;&gt;Jack&lt;/option&gt;
-        &lt;option value=&quot;jade&quot;&gt;Jade&lt;/option&gt;
-        &lt;option value=&quot;java&quot;&gt;Java&lt;/option&gt;
-        &lt;option value=&quot;javascript&quot;&gt;JavaScript&lt;/option&gt;
-        &lt;option value=&quot;json&quot;&gt;JSON&lt;/option&gt;
-        &lt;option value=&quot;jsoniq&quot;&gt;JSONiq&lt;/option&gt;
-        &lt;option value=&quot;jsp&quot;&gt;JSP&lt;/option&gt;
-        &lt;option value=&quot;jsx&quot;&gt;JSX&lt;/option&gt;
-        &lt;option value=&quot;julia&quot;&gt;Julia&lt;/option&gt;
-        &lt;option value=&quot;latex&quot;&gt;LaTeX&lt;/option&gt;
-        &lt;option value=&quot;lean&quot;&gt;Lean&lt;/option&gt;
-        &lt;option value=&quot;less&quot;&gt;LESS&lt;/option&gt;
-        &lt;option value=&quot;liquid&quot;&gt;Liquid&lt;/option&gt;
-        &lt;option value=&quot;lisp&quot;&gt;Lisp&lt;/option&gt;
-        &lt;option value=&quot;livescript&quot;&gt;LiveScript&lt;/option&gt;
-        &lt;option value=&quot;logiql&quot;&gt;LogiQL&lt;/option&gt;
-        &lt;option value=&quot;lsl&quot;&gt;LSL&lt;/option&gt;
-        &lt;option value=&quot;lua&quot;&gt;Lua&lt;/option&gt;
-        &lt;option value=&quot;luapage&quot;&gt;LuaPage&lt;/option&gt;
-        &lt;option value=&quot;lucene&quot;&gt;Lucene&lt;/option&gt;
-        &lt;option value=&quot;makefile&quot;&gt;Makefile&lt;/option&gt;
-        &lt;option value=&quot;markdown&quot;&gt;Markdown&lt;/option&gt;
-        &lt;option value=&quot;mask&quot;&gt;Mask&lt;/option&gt;
-        &lt;option value=&quot;matlab&quot;&gt;MATLAB&lt;/option&gt;
-        &lt;option value=&quot;mel&quot;&gt;MEL&lt;/option&gt;
-        &lt;option value=&quot;mushcode&quot;&gt;MUSHCode&lt;/option&gt;
-        &lt;option value=&quot;mysql&quot;&gt;MySQL&lt;/option&gt;
-        &lt;option value=&quot;nix&quot;&gt;Nix&lt;/option&gt;
-        &lt;option value=&quot;objectivec&quot;&gt;Objective-C&lt;/option&gt;
-        &lt;option value=&quot;ocaml&quot;&gt;OCaml&lt;/option&gt;
-        &lt;option value=&quot;pascal&quot;&gt;Pascal&lt;/option&gt;
-        &lt;option value=&quot;perl&quot;&gt;Perl&lt;/option&gt;
-        &lt;option value=&quot;pgsql&quot;&gt;pgSQL&lt;/option&gt;
-        &lt;option value=&quot;php&quot;&gt;PHP&lt;/option&gt;
-        &lt;option value=&quot;powershell&quot;&gt;Powershell&lt;/option&gt;
-        &lt;option value=&quot;praat&quot;&gt;Praat&lt;/option&gt;
-        &lt;option value=&quot;prolog&quot;&gt;Prolog&lt;/option&gt;
-        &lt;option value=&quot;properties&quot;&gt;Properties&lt;/option&gt;
-        &lt;option value=&quot;protobuf&quot;&gt;Protobuf&lt;/option&gt;
-        &lt;option value=&quot;python&quot;&gt;Python&lt;/option&gt;
-        &lt;option value=&quot;r&quot;&gt;R&lt;/option&gt;
-        &lt;option value=&quot;rdoc&quot;&gt;RDoc&lt;/option&gt;
-        &lt;option value=&quot;rhtml&quot;&gt;RHTML&lt;/option&gt;
-        &lt;option value=&quot;ruby&quot;&gt;Ruby&lt;/option&gt;
-        &lt;option value=&quot;rust&quot;&gt;Rust&lt;/option&gt;
-        &lt;option value=&quot;sass&quot;&gt;SASS&lt;/option&gt;
-        &lt;option value=&quot;scad&quot;&gt;SCAD&lt;/option&gt;
-        &lt;option value=&quot;scala&quot;&gt;Scala&lt;/option&gt;
-        &lt;option value=&quot;scheme&quot;&gt;Scheme&lt;/option&gt;
-        &lt;option value=&quot;scss&quot;&gt;SCSS&lt;/option&gt;
-        &lt;option value=&quot;sh&quot;&gt;SH&lt;/option&gt;
-        &lt;option value=&quot;sjs&quot;&gt;SJS&lt;/option&gt;
-        &lt;option value=&quot;smarty&quot;&gt;Smarty&lt;/option&gt;
-        &lt;option value=&quot;snippets&quot;&gt;snippets&lt;/option&gt;
-        &lt;option value=&quot;soy_template&quot;&gt;Soy Template&lt;/option&gt;
-        &lt;option value=&quot;space&quot;&gt;Space&lt;/option&gt;
-        &lt;option value=&quot;sql&quot;&gt;SQL&lt;/option&gt;
-        &lt;option value=&quot;stylus&quot;&gt;Stylus&lt;/option&gt;
-        &lt;option value=&quot;svg&quot;&gt;SVG&lt;/option&gt;
-        &lt;option value=&quot;tcl&quot;&gt;Tcl&lt;/option&gt;
-        &lt;option value=&quot;tex&quot;&gt;Tex&lt;/option&gt;
-        &lt;option value=&quot;text&quot;&gt;Text&lt;/option&gt;
-        &lt;option value=&quot;textile&quot;&gt;Textile&lt;/option&gt;
-        &lt;option value=&quot;toml&quot;&gt;Toml&lt;/option&gt;
-        &lt;option value=&quot;twig&quot;&gt;Twig&lt;/option&gt;
-        &lt;option value=&quot;typescript&quot;&gt;Typescript&lt;/option&gt;
-        &lt;option value=&quot;vala&quot;&gt;Vala&lt;/option&gt;
-        &lt;option value=&quot;vbscript&quot;&gt;VBScript&lt;/option&gt;
-        &lt;option value=&quot;velocity&quot;&gt;Velocity&lt;/option&gt;
-        &lt;option value=&quot;verilog&quot;&gt;Verilog&lt;/option&gt;
-        &lt;option value=&quot;vhdl&quot;&gt;VHDL&lt;/option&gt;
-        &lt;option value=&quot;xml&quot;&gt;XML&lt;/option&gt;
-        &lt;option value=&quot;xquery&quot;&gt;XQuery&lt;/option&gt;
-        &lt;option value=&quot;yaml&quot;&gt;YAML&lt;/option&gt;
-        &lt;option value=&quot;django&quot;&gt;Django&lt;/option&gt;
-        &lt;/select&gt;
-        &lt;!--Font Sizes--&gt;
-        &lt;span&gt;&amp;nbsp;Font Size&amp;nbsp;&lt;/span&gt;
-        &lt;select id=&quot;fontsize&quot; size=&quot;1&quot; onchange='changeSize()'&gt;
-        &lt;option value=&quot;10px&quot;&gt;10px&lt;/option&gt;
-        &lt;option value=&quot;11px&quot;&gt;11px&lt;/option&gt;
-        &lt;option value=&quot;12px&quot;&gt;12px&lt;/option&gt;
-        &lt;option value=&quot;13px&quot;&gt;13px&lt;/option&gt;
-        &lt;option value=&quot;14px&quot;&gt;14px&lt;/option&gt;
-        &lt;option value=&quot;16px&quot;&gt;16px&lt;/option&gt;
-        &lt;option value=&quot;18px&quot;&gt;18px&lt;/option&gt;
-        &lt;option value=&quot;20px&quot;&gt;20px&lt;/option&gt;
-        &lt;option value=&quot;24px&quot;&gt;24px&lt;/option&gt;
-        &lt;/select&gt;
-        &lt;!--Word wrap switching--&gt;
-        &lt;span&gt;&amp;nbsp;World Wrap&amp;nbsp;&lt;/span&gt;
-        &lt;input onclick=&quot;setdeworldWrap(this)&quot; type=&quot;checkbox&quot; id=&quot;checkworldwrap&quot;&gt;    
-        &lt;/div&gt;
-        &lt;!--Ace Script to include--&gt;
-        &lt;script src=&quot;~/Scripts/ace/ace.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
-        &lt;!--Javascript to render the basic editor--&gt;
-        &lt;script&gt;
-        function init() {
-        var editor = {}
-        initEditor()
-        setdefaultMode();
-        setdefaultTheme();
-        setdefaultFontSize();      
-        }
-        function initEditor()
-        { editor = ace.edit(&quot;editor&quot;); }
-        function changeTheme() {
-        var x = document.getElementById(&quot;theme&quot;).value;
-        editor.setTheme(x);
-        }
-        function changeMode() {
-        var x = document.getElementById(&quot;mode&quot;).value;
-        editor.getSession().setMode('ace/mode/' + x);
-        }
-        function changeSize() {
-        var x = document.getElementById(&quot;fontsize&quot;).value;
-        editor.setOptions({
-        fontSize: x
-        });
-        }
-        function setdefaultMode() {
-        document.getElementById(&quot;mode&quot;).value = &quot;html&quot;;
-        changeMode();
-        }
-        function setdefaultTheme() {
-        document.getElementById(&quot;theme&quot;).value = &quot;ace/theme/cobalt&quot;;
-        changeTheme();
-        }
-        function setdefaultFontSize() {
-        document.getElementById(&quot;fontsize&quot;).value = &quot;14px&quot;;
-        changeSize();
-        }
-        function setdeworldWrap(element) {
-        editor.getSession().setUseWrapMode(element.checked);
-        }            
-        &lt;/script&gt;
-        &lt;/body&gt;
-        &lt;/html&gt;
-        &lt;!--This implementation of basic editor is a gist by Diego Aldo Burlando April 2015--&gt;
-    </div>
+
+
+    This is a very basic implementation of functionality of ACE.
+    Please visit:https://github.com/diegomary/ACEinitialConfiguration.git
+    and update the existing project with new functionalities.
+
+    Kindest regards
+    Diego Burlando
+    
+
+    </pre>
     <div style="margin-top:1%;display:none;" id="buttonContainer">
-        <span style="color:white;">Theme&nbsp;</span>
+        <span title="choose theme" style="color:white;">theme&nbsp;</span>
         <select id="theme" size="1" onchange='changeTheme()'>
             <optgroup label="Bright"><option value="ace/theme/chrome">Chrome</option><option value="ace/theme/clouds">Clouds</option><option value="ace/theme/crimson_editor">Crimson Editor</option><option value="ace/theme/dawn">Dawn</option><option value="ace/theme/dreamweaver">Dreamweaver</option><option value="ace/theme/eclipse">Eclipse</option><option value="ace/theme/github">GitHub</option><option value="ace/theme/solarized_light">Solarized Light</option><option value="ace/theme/textmate">TextMate</option><option value="ace/theme/tomorrow">Tomorrow</option><option value="ace/theme/xcode">XCode</option><option value="ace/theme/kuroir">Kuroir</option><option value="ace/theme/katzenmilch">KatzenMilch</option></optgroup>
             <optgroup label="Dark"><option value="ace/theme/ambiance">Ambiance</option><option value="ace/theme/chaos">Chaos</option><option value="ace/theme/clouds_midnight">Clouds Midnight</option><option value="ace/theme/cobalt">Cobalt</option><option value="ace/theme/idle_fingers">idle Fingers</option><option value="ace/theme/kr_theme">krTheme</option><option value="ace/theme/merbivore">Merbivore</option><option value="ace/theme/merbivore_soft">Merbivore Soft</option><option value="ace/theme/mono_industrial">Mono Industrial</option><option value="ace/theme/monokai">Monokai</option><option value="ace/theme/pastel_on_dark">Pastel on dark</option><option value="ace/theme/solarized_dark">Solarized Dark</option><option value="ace/theme/terminal">Terminal</option><option value="ace/theme/tomorrow_night">Tomorrow Night</option><option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option><option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option><option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option><option value="ace/theme/twilight">Twilight</option><option value="ace/theme/vibrant_ink">Vibrant Ink</option></optgroup>
         </select>
-        <span style="color:white;">&nbsp;Language&nbsp;</span>
+        <span title="choose programming language" style="color:white;">&nbsp;lang&nbsp;</span>
         <select id="mode" size="1" onchange='changeMode()'>
-
             <option value="abap">ABAP</option>
             <option value="abc">ABC</option>
             <option value="actionscript">ActionScript</option>
@@ -405,7 +167,7 @@
             <option value="django">Django</option>
 
         </select>
-        <span style="color:white;">&nbsp;Font Size&nbsp;</span>
+        <span title="set font size for editor" style="color:white;">&nbsp;Font&nbsp;</span>
         <select id="fontsize" size="1" onchange='changeSize()'>
             <option value="10px">10px</option>
             <option value="11px">11px</option>
@@ -417,8 +179,10 @@
             <option value="20px">20px</option>
             <option value="24px">24px</option>
         </select>
-        <span style="color:white;">&nbsp;&nbsp;&nbsp;World Wrap</span>
+        <span title="toggle word wrap on/off" style="color:white;">&nbsp;&nbsp;&nbsp;wrap</span>
         <input onclick="setdeworldWrap(this)" type="checkbox" id="checkworldwrap">
+        <span title="toggle word completion on/off" style="color:white;">&nbsp;&nbsp;&nbsp;wc</span>
+        <input onclick="setAutocompletion(this)" type="checkbox" id="checkautocompletion">
     </div>
     <script src="jquery/jquery-2.1.1.min.js"></script>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -431,18 +195,12 @@
             initEditor()
             setdefaultMode();
             setdefaultTheme();
-            setdefaultFontSize();
-            setdeworldWrap(null)
+            setdefaultFontSize();            
         }
         function initEditor()
         {
-        	ace.require("ace/ext/language_tools");
-            editor = ace.edit("editor");
-            editor.setOptions({
-        	enableBasicAutocompletion: true,
-        	enableSnippets: true,
-        	enableLiveAutocompletion: true
-    		});
+            ace.require("ace/ext/language_tools");
+            editor = ace.edit("editor");               
         }
         function changeTheme() {
             var x = document.getElementById("theme").value;
@@ -459,7 +217,7 @@
             });
         }
         function setdefaultMode() {
-            document.getElementById("mode").value = "html";
+            document.getElementById("mode").value = "text";
             changeMode();
         }
         function setdefaultTheme() {
@@ -472,7 +230,37 @@
         }
         function setdeworldWrap(element) {
             editor.getSession().setUseWrapMode(element.checked);
-        }        
+        }
+        function setAutocompletion(element) {
+            editor.setOptions({
+                enableBasicAutocompletion: element.checked,
+                enableSnippets: element.checked,
+                enableLiveAutocompletion: element.checked
+            });
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+   
