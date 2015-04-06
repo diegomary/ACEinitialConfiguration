@@ -422,6 +422,7 @@
     </div>
     <script src="jquery/jquery-2.1.1.min.js"></script>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="ace/ext-language_tools.js"></script>
     <script>
         var editor = {};
         function init() {
@@ -435,7 +436,13 @@
         }
         function initEditor()
         {
+        	ace.require("ace/ext/language_tools");
             editor = ace.edit("editor");
+            editor.setOptions({
+        	enableBasicAutocompletion: true,
+        	enableSnippets: true,
+        	enableLiveAutocompletion: true
+    		});
         }
         function changeTheme() {
             var x = document.getElementById("theme").value;
