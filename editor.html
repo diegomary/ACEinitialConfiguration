@@ -183,6 +183,8 @@
         <input onclick="setdeworldWrap(this)" type="checkbox" id="checkworldwrap">
         <span title="toggle word completion on/off" style="color:white;">&nbsp;&nbsp;&nbsp;wc</span>
         <input onclick="setAutocompletion(this)" type="checkbox" id="checkautocompletion">
+        <span title="Fold/Unfold code" style="color:white;">&nbsp;&nbsp;&nbsp;Fold/Unfold code</span>
+        <input onclick="FoldUnfold(this)" type="checkbox" id="checkfold">
     </div>
     <script src="jquery/jquery-2.1.1.min.js"></script>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -237,6 +239,10 @@
                 enableSnippets: element.checked,
                 enableLiveAutocompletion: element.checked
             });
+        }        
+        function FoldUnfold(element) {        
+            if(element.checked) editor.getSession().foldAll(); 
+            else editor.getSession().unfold();
         }
     </script>
 </body>
