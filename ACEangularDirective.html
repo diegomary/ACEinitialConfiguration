@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>	
+<script type="text/javascript" src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-ace/ui-ace.js"></script>
+<style>
+.ace_editor { height: 200px; }
+</style>
+</head>
+<body data-ng-app="MyApp" data-ng-controller="TestAceController" >
+<button ng-click='addDocument()'>Add New Editor</button>
+<br>
+<br>
+
+<div ng-repeat='content in contents'>
+	<div ng-model="content.text" ui-ace="{
+	  useWrapMode : true,
+	  showGutter: true,
+	  theme:'cobalt',
+	  mode: 'javascript',	 
+	  firstLineNumber: 5,
+	  onLoad: aceLoaded,
+	  onChange: aceChanged
+	}">
+	</div>
+	<button ng-click='showContent(content.text)'>Click here to see Editor Content</button>
+	<button ng-click='changeTheme(content)'>Change Theme to Bright</button>
+</div>
+
+
+<script>
+angular.module('MyApp', ['ui.ace'])
+.factory('ProductionFactory', function ($http) {return {}})
+.controller('TestAceController', ['$scope', 'ProductionFactory', function ($scope, ProductionFactory) {
+var Editors=[];
+//$scope.contents = [{text:'var x=120;var y = 3;'},{text:'var x=120;var y = 5;'},{text:'var x=120;var y = 6;'}];
+$scope.contents = [];
+
+$scope.showContent = function(text){
+	alert(text);	
+ };
+
+$scope.aceLoaded = function(_editor) {
+	Editors.push(_editor);
+	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor
+
+};
+
+$scope.aceChanged = function(e){};
+$scope.addDocument=function(){$scope.contents.push({})}
+
+
+$scope.changeTheme=function(content){
+	//content._ownEditor.getSession().getMode().$id	
+	var theme= content._ownEditor.getTheme()
+	content._ownEditor.setTheme(theme==='ace/theme/chrome' ? 'ace/theme/cobalt' : 'ace/theme/chrome');
+}
+
+angular.element(document).ready(function(){
+var x =0;
+angular.forEach($scope.contents, function(content) {content._ownEditor=Editors[x]; x++;});
+
+});
+
+
+}])
+</script>
+</body>
