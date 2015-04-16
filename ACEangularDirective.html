@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-
 <head>	
 <script type="text/javascript" src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
@@ -10,7 +9,7 @@
 .ace_editor { height: 200px; }
 </style>
 </head>
-<body data-ng-app="MyApp" data-ng-controller="TestAceController" >
+<body data-ng-app="MyApp" data-ng-controller="TestAceController as aceCtrl" >
 <button ng-click='addDocument()'>Add New Editor</button>
 <br>
 <br>
@@ -21,49 +20,72 @@
 	  showGutter: true,
 	  theme:'cobalt',
 	  mode: 'javascript',	 
-	  firstLineNumber: 5,
+	  firstLineNumber: 1,
 	  onLoad: aceLoaded,
 	  onChange: aceChanged
 	}">
 	</div>
 	<button ng-click='showContent(content.text)'>Click here to see Editor Content</button>
-	<button ng-click='changeTheme(content)'>Change Theme to Bright</button>
+	<button ng-click='changeTheme(content)'>Change Theme to Bright</button>	
+	<select ng-model="content.selectedTheme" ng-change="aceCtrl.changeTheme(content)"
+	 ng-options="t.themeName group by t.shade disable when t.notAnOption for t in content.themes">
+	       <option value="">-- choose Theme --</option>
+	</select>
 </div>
-
 
 <script>
 angular.module('MyApp', ['ui.ace'])
-.factory('ProductionFactory', function ($http) {return {}})
-.controller('TestAceController', ['$scope', 'ProductionFactory', function ($scope, ProductionFactory) {
-var Editors=[];
-//$scope.contents = [{text:'var x=120;var y = 3;'},{text:'var x=120;var y = 5;'},{text:'var x=120;var y = 6;'}];
+.factory('AceOptionsFactory', function ($http) {
+	var service={
+		authorName:function(){
+			return 'Diego Burlando'			
+		},		
+		listThemes:function(){
+			var ret=
+		[
+		{themeName: 'Cobalt', themeValue: 'ace/theme/cobalt', shade:'Dark Themes'},
+		{themeName: 'Clouds Midnight', themeValue: 'ace/theme/clouds_midnight',shade:'Dark Themes', notAnOption:false},
+		{themeName: 'Pastel on dark', themeValue: 'ace/theme/pastel_on_dark',shade:'Dark Themes'},
+		{themeName: 'Chrome', themeValue: 'ace/theme/chrome',shade:'Bright Themes'},
+		{themeName: 'Dreamweaver', themeValue: 'ace/theme/dreamweaver',shade:'Bright Themes'}
+		];
+
+		return ret
+					
+        }};
+	return service;})
+.controller('TestAceController', ['$scope', 'AceOptionsFactory', function ($scope, AceOptionsFactory) {
+
 $scope.contents = [];
-
-$scope.showContent = function(text){
-	alert(text);	
- };
-
+var globalThemes =AceOptionsFactory.listThemes();
+$scope.showContent = function(text){alert(text);};
 $scope.aceLoaded = function(_editor) {
-	Editors.push(_editor);
-	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor
-
-};
-
+	//Editors.push(_editor);
+	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor};
 $scope.aceChanged = function(e){};
-$scope.addDocument=function(){$scope.contents.push({})}
-
-
-$scope.changeTheme=function(content){
-	//content._ownEditor.getSession().getMode().$id	
-	var theme= content._ownEditor.getTheme()
-	content._ownEditor.setTheme(theme==='ace/theme/chrome' ? 'ace/theme/cobalt' : 'ace/theme/chrome');
+$scope.addDocument=function(){
+	$scope.contents.push({})
+	$scope.contents[$scope.contents.length-1].themes = globalThemes;
+	$scope.contents[$scope.contents.length-1].selectedTheme= globalThemes[0];
+}
+this.changeTheme = function(selectedEditor)
+{
+  selectedEditor._ownEditor.setTheme(selectedEditor.selectedTheme.themeValue);
+  selectedEditor._ownEditor.focus();
 }
 
-angular.element(document).ready(function(){
-var x =0;
-angular.forEach($scope.contents, function(content) {content._ownEditor=Editors[x]; x++;});
 
-});
+// $scope.changeTheme=function(content){
+// 	//content._ownEditor.getSession().getMode().$id	
+// 	var theme= content._ownEditor.getTheme()
+// 	content._ownEditor.setTheme(theme==='ace/theme/chrome' ? 'ace/theme/cobalt' : 'ace/theme/chrome');
+// }
+
+// angular.element(document).ready(function(){
+// var x =0;
+// angular.forEach($scope.contents, function(content) {content._ownEditor=Editors[x]; x++;});
+
+// });
 
 
 }])
