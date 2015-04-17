@@ -10,7 +10,8 @@
 </style>
 </head>
 <body data-ng-app="MyApp" data-ng-controller="TestAceController as aceCtrl" >
-<button ng-click='addDocument()'>Add New Editor</button>
+<button ng-click='aceCtrl.addDocument()'>Add New Editor</button>
+<button ng-click='aceCtrl.test()'>Test</button>
 <br>
 <br>
 
@@ -25,11 +26,14 @@
 	  onChange: aceChanged
 	}">
 	</div>
-	<button ng-click='showContent(content.text)'>Click here to see Editor Content</button>
-	<button ng-click='changeTheme(content)'>Change Theme to Bright</button>	
+	<button ng-click='showContent(content.text)'>Click here to see Editor Content</button>	
 	<select ng-model="content.selectedTheme" ng-change="aceCtrl.changeTheme(content)"
 	 ng-options="t.themeName group by t.shade disable when t.notAnOption for t in content.themes">
 	       <option value="">-- choose Theme --</option>
+	</select>
+	<select ng-model="content.selectedMode" ng-change="aceCtrl.changeMode(content)"
+	 ng-options="t.modeName disable when t.notAnOption for t in content.modes">
+	       <option value="">-- choose Language mode --</option>
 	</select>
 </div>
 
@@ -41,38 +45,71 @@ angular.module('MyApp', ['ui.ace'])
 			return 'Diego Burlando'			
 		},		
 		listThemes:function(){
-			var ret=
-		[
+		var allThemes=[
 		{themeName: 'Cobalt', themeValue: 'ace/theme/cobalt', shade:'Dark Themes'},
 		{themeName: 'Clouds Midnight', themeValue: 'ace/theme/clouds_midnight',shade:'Dark Themes', notAnOption:false},
 		{themeName: 'Pastel on dark', themeValue: 'ace/theme/pastel_on_dark',shade:'Dark Themes'},
 		{themeName: 'Chrome', themeValue: 'ace/theme/chrome',shade:'Bright Themes'},
 		{themeName: 'Dreamweaver', themeValue: 'ace/theme/dreamweaver',shade:'Bright Themes'}
-		];
-
-		return ret
-					
-        }};
+		];return allThemes					
+        },
+        listModes:function(){
+		var allModes=[
+		{modeName: 'JavaScript', modeValue: 'javascript'},
+		{modeName: 'HTML', modeValue: 'html', notAnOption:false},
+		{modeName: 'JSON', modeValue: 'json'},
+		{modeName: 'C#', modeValue: 'csharp'},
+		{modeName: 'GO', modeValue: 'golang'}
+		];return allModes					
+        }
+    };
 	return service;})
-.controller('TestAceController', ['$scope', 'AceOptionsFactory', function ($scope, AceOptionsFactory) {
+.controller('TestAceController', ['$scope', 'AceOptionsFactory','$timeout', function ($scope, AceOptionsFactory,$timeout) {
 
 $scope.contents = [];
+var Editors=[];
 var globalThemes =AceOptionsFactory.listThemes();
+var globalModes=AceOptionsFactory.listModes()
 $scope.showContent = function(text){alert(text);};
 $scope.aceLoaded = function(_editor) {
-	//Editors.push(_editor);
+	
 	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor};
 $scope.aceChanged = function(e){};
-$scope.addDocument=function(){
+this.addDocument=function(){
 	$scope.contents.push({})
 	$scope.contents[$scope.contents.length-1].themes = globalThemes;
 	$scope.contents[$scope.contents.length-1].selectedTheme= globalThemes[0];
+
+	$scope.contents[$scope.contents.length-1].modes = globalModes;
+	$scope.contents[$scope.contents.length-1].selectedMode= globalModes[0];
 }
 this.changeTheme = function(selectedEditor)
 {
   selectedEditor._ownEditor.setTheme(selectedEditor.selectedTheme.themeValue);
   selectedEditor._ownEditor.focus();
 }
+
+this.changeMode = function(selectedEditor)
+{
+  //alert(selectedEditor._ownEditor.getSession().getValue())
+  selectedEditor._ownEditor.getSession().setMode('ace/mode/' + selectedEditor.selectedMode.modeValue);
+  selectedEditor._ownEditor.focus();
+}
+
+
+
+
+this.test=function()
+{
+var temp =$scope.contents;
+$scope.contents=[];
+ $timeout(function() {
+   $scope.contents=temp;
+}, 3000);
+}
+
+
+
 
 
 // $scope.changeTheme=function(content){
