@@ -73,7 +73,9 @@ var globalModes=AceOptionsFactory.listModes()
 $scope.showContent = function(text){alert(text);};
 $scope.aceLoaded = function(_editor) {
 	
-	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor};
+//	$scope.contents[$scope.contents.length - 1]._ownEditor=_editor
+
+};
 $scope.aceChanged = function(e){};
 this.addDocument=function(){
 	$scope.contents.push({})
@@ -104,7 +106,25 @@ this.test=function()
 var temp =$scope.contents;
 $scope.contents=[];
  $timeout(function() {
+
+
    $scope.contents=temp;
+
+
+angular.forEach($scope.contents, function(content) {
+
+// alert(content.selectedTheme.themeValue)
+// content._ownEditor.getSession().setMode('ace/mode/' + content.selectedMode.modeValue);
+alert(content.selectedTheme.themeValue)
+content._ownEditor.setTheme(content.selectedTheme.themeValue);
+});
+
+
+
+
+
+
+
 }, 3000);
 }
 
