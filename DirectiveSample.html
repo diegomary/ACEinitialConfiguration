@@ -1,32 +1,12 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>	
-
-<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<head>
+<script type="text/javascript" src="http://www.dmm888.com/Scripts/angularjs/angular.js"></script>
 <style>
-
 </style>
 </head>
-<body data-ng-app="MyApp" data-ng-controller="DirectiveSampleController as dirCtrl" >
-<button ng-click='dirCtrl.showVariable()'>Test Project</button>
-<br>
-<div ng-repeat='element in dirCtrl.initialArray'>
-{{element.name}}	
-</div>
-<br>
-<first-custom-directive ng-model='value'></first-custom-directive>
-<br>
-<second-custom-directive ng-model='dirCtrl.valuewiththis'></second-custom-directive>
-<br>
-
-<third-custom-directive valuetobind ='dirCtrl.importantValue'></third-custom-directive>
-<br>
-
-<shared-scope></shared-scope>
-
-
-
+<body data-ng-app="MyApp" data-ng-controller="DirectiveSampleController as dirCtrl">
+<third-custom-directive valuetobind ='dirCtrl.importantValue' value1tobind='dirCtrl.importantValue1' ></third-custom-directive>
 <script>
 angular.module('MyApp',[])
 .factory('FactoryTest', function ($http) {
@@ -38,60 +18,25 @@ angular.module('MyApp',[])
         helper2:function(){
 			var myvar2={};
 			return myvar2}};return service;}).
-directive('firstCustomDirective', function() {
-    return {
-      restrict: 'AE',
-      //^ -- Look for the controller on parent elements, not just on the local scope
-	  // ? -- Don't raise an error if the controller isn't found
-      require: '^ngModel', 
-      replace: true,
-      scope: {    
-      first: '=ngModel'
-
-      }, // Bidirectional with parent scope
-      templateUrl: 'templates/firstexample.html'
-    };
-  }).
-directive('secondCustomDirective', function() {
-    return {
-      restrict: 'AE',     
-      require: '^ngModel', 
-      replace: true,
-      scope: {
-      ngModel: '='     
-      },
-      templateUrl: 'templates/secondexample.html'
-    };
-  }).
 directive('thirdCustomDirective', function() {
     return {
       restrict: 'AE',    
       replace: true,
-      scope: {
-      valuetobind: '='     
-      },
-      templateUrl: 'templates/thirdexample.html'
+      transclude: true,
+      scope: {valuetobind: '=', value1tobind: '='},
+      templateUrl: 'templates/thirdexample.html',
+      controller: ['$scope', '$http', function($scope, $http) {
+	  alert($scope.valuetobind);
+	  alert($scope.value1tobind);
+      }],
+      link: function(scope, iElement, iAttrs, ctrl) {
+      alert(scope.valuetobind + ' At link time');            
+    }
     };
   })
-.directive('sharedScope', function () {
-    return {
-    	restrict: 'AE', 
-        templateUrl: 'templates/sharedscope.html'
-    };
-})
 .controller('DirectiveSampleController', ['$scope', 'FactoryTest','$timeout', function ($scope, FactoryTest,$timeout) {
-	this.initialVariable='Diego Aldo Burlando';
-	this.initialArray=[{name:'diego'},{name:'maria'},{name:'harry'}]
-	this.showVariable= function(){alert(this.initialVariable);}
-	
-	$scope.value =' is a senior software developer';
-	this.valuewiththis =' is a decent single parent';
-	this.anotherValue=' he sometimes likes to have a good ice cream';
-
-
-	//$scope.importantValue=' also he likes to jog in the countryside'
-this.importantValue=' also he likes to jog in the countryside'
-
+this.importantValue='This is the value to send to the directive';
+this.importantValue1='Another value to send to the directive';
 }])
 </script>
 </body>
