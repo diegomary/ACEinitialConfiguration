@@ -1,54 +1,63 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>jQuery UI Tabs - Simple manipulation</title>
-<style>
-body {
-  font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
-  font-size: 62.5%;
- 
-/*.ui-widget-content{background: white !important;}*/
-</style>
+<head>  <meta charset="utf-8"> <title>jQuery UI Tabs - Simple manipulation</title>
 
-<link rel="stylesheet" href="jqueryui/jquery-ui.min.css">
+
+<link rel="stylesheet" href="cssapp/cssapp.css">
 <script src="jquery/jquery.js"></script>
 <script src="jqueryui/jquery-ui.min.js"></script>
 <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="ace/ext-language_tools.js"></script>
+<script>
+// Load Scripts Dynamically
+function loadjscssfile(filename, filetype){
+    if (filetype=="js"){ //if filename is a external JavaScript file
+        var fileref=document.createElement('script')
+        fileref.setAttribute("type","text/javascript")
+        fileref.setAttribute("src", filename)
+    }
+    else if (filetype=="css"){ //if filename is an external CSS file
+        var fileref=document.createElement("link")
+        fileref.setAttribute("rel", "stylesheet")
+        fileref.setAttribute("type", "text/css")
+        fileref.setAttribute("href", filename)
+    }
+    if (typeof fileref!="undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+    }
+// Unload scripts Dynamically
+function removejscssfile(filename, filetype){
+    var targetelement=(filetype=="js")? "script" : (filetype=="css")? "link" : "none" //determine element type to create nodelist from
+    var targetattr=(filetype=="js")? "src" : (filetype=="css")? "href" : "none" //determine corresponding attribute to test for
+    var allsuspects=document.getElementsByTagName(targetelement)
+    for (var i=allsuspects.length; i>=0; i--){ //search backwards within nodelist for matching elements to remove
+    if (allsuspects[i] && allsuspects[i].getAttribute(targetattr)!=null && allsuspects[i].getAttribute(targetattr).indexOf(filename)!=-1)
+        allsuspects[i].parentNode.removeChild(allsuspects[i]) //remove element by calling parentNode.removeChild()
+    }}
 
-
-  <style>
-  #dialog label, #dialog input { display:block; }
-  #dialog label { margin-top: 0.5em; }
-  #dialog input, #dialog textarea { width: 95%; }
-  #tabs { margin-top: 1em; }
-  #tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
-  #add_tab { cursor: pointer; }
-  </style>
-  <script>
-  $(function() {
+$(function() {
+      var currentTheme="black-tie";
       var tabTitle = $( "#tab_title" ),
       tabTheme =$("#tab_theme"),
+      tabuiThemes=$("tab_uithemes"),
       tabLanguage=$("#tab_language"),
       tabfontSize=$("#tab_fontsize"),
       tabContent = $( "#tab_content" ),
       tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
       tabCounter = 0;
-      var tabs =$("#tabs" ).tabs({                                       
-      activate:function(event,ui)
-      {                                              
-        var index=ui.newTab.index();       
-        $('#tabs-'+index).removeClass('ui-tabs-panel').removeClass('ui-widget-content');
-        var editor = ace.edit('tabs-'+index);
-        editor.focus();  
-      }                                                                          
-      });
-      //$('#tabs').removeClass('ui-widget-content'); 
+      var tabs =$("#tabs").tabs({
+          activate:function(event,ui){
+          var index=ui.newTab.index();       
+          $('#tabs-'+index).removeClass('ui-tabs-panel').removeClass('ui-widget-content');
+          var editor = ace.edit('tabs-'+index);
+          editor.focus();
+        }});    
     // modal dialog init: custom buttons and a "close" callback resetting the form inside
     var dialog = $( "#dialog" ).dialog({
       autoOpen: false,
       modal: true,
+      // height: 300,
+      // width: 350,
       buttons: {
         Add: function() {
           addTab();
@@ -56,11 +65,8 @@ body {
         },
         Cancel: function() {
           $( this ).dialog( "close" );
-        }
-      },
-      close: function() {
-        form[ 0 ].reset();
-      }
+        }},
+      close: function() {form[ 0 ].reset();}
     });
  
     // addTab form: calls addTab function on submit and closes the dialog
@@ -71,7 +77,7 @@ body {
     });
  
     // actual addTab function: adds new tab using the input from the form above
-    function addTab() {      
+    function addTab() {
       var label = tabTitle.val() || "Tab " + tabCounter,
       id = "tabs-" + tabCounter,
       li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) );
@@ -86,14 +92,21 @@ body {
       editor.getSession().setValue(tabContent.val());   
       tabs.tabs( "refresh" );     
       var numTabs= $('#tabs >ul >li').size();   
-      $("#tabs").tabs("option", "active", numTabs-1);    
-    }
+      $("#tabs").tabs("option", "active", numTabs-1);}
  
+      // Change Themes select
+      $( "#tab_uithemes" ).change(function() {
+        var themetoLoad=$("#tab_uithemes option:selected").val();      
+        removejscssfile("jqueryui/" + currentTheme +"/jquery-ui.min.css", "css"); 
+        currentTheme=themetoLoad;
+        loadjscssfile("jqueryui/" + themetoLoad +"/jquery-ui.min.css", "css");          
+      }).change(); // to fire first time
+
     // addTab button: just opens the dialog
     $( "#add_tab" )
       .button()
       .click(function() {
-        dialog.dialog( "open" );
+        dialog.dialog("open");
       });
  
     // close icon: removing the tab on click
@@ -114,14 +127,39 @@ body {
   </script>
 </head>
 <body>
-
 <div id="tabs" style="height:650px;">
+<div style='float:left'>
+  <select id="tab_uithemes" name="tab_uithemes" id = "tab_language"  size="1" style="border-radius:2px;height:20px">
+        <option value="black-tie">Black tie</option>
+        <option value="blitzer">Blitzer</option>
+        <option value="cupertino">Cupertino</option>
+        <option value="dark-hive">Dark hive</option>
+        <option value="dot-luv">Dot luv</option>
+        <option value="eggplant">Eggplant</option>
+        <option value="excite-bike">Excite bike</option>      
+        <option value="flick">Flick</option>
+        <option value="hot-sneaks">Hot sneaks</option>
+        <option value="humanity">Humanity</option>
+        <option value="le-frog">Le frog</option>
+        <option value="mint-choc">Mint choc</option>
+        <option value="overcast">Overcast</option>
+        <option value="pepper-grinder">Pepper grinder</option>
+        <option value="redmond">Redmond</option>
+        <option value="smoothness">Smoothness</option>
+        <option value="south-street">South street</option>
+        <option value="start">Start</option>
+        <option value="sunny">Sunny</option>
+        <option value="swanky-purse">Swanky purse</option>
+        <option value="trontastic">Trontastic</option>
+        <option value="ui-darkness">Ui darkness</option>
+        <option value="ui-lightness">Ui lightness</option>
+        <option value="vader">Vader</option>
+</select>
+</div>
 <div style='float:left'>
   <button  id="add_tab">Add</button>
 </div>
-
-  <ul>
- 
+  <ul> 
  </ul>   
 </div>
 <div id="dialog" title="Tab data">
