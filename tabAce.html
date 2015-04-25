@@ -43,15 +43,14 @@ $(function() {
       tabLanguage=$("#tab_language"),
       tabfontSize=$("#tab_fontsize"),
       tabContent = $( "#tab_content" ),
-      tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
+      tabTemplate = "<li><a href='#{href}'>#{label}</a> <span  class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
       tabCounter = 0;
       var tabs =$("#tabs").tabs({
-          activate:function(event,ui){          
-          var index=ui.newTab.index();                
+          activate:function(event,ui){         
+          var index=ui.newTab.index();      
           $('#'+ ui.newPanel[0].id).removeClass('ui-tabs-panel').removeClass('ui-widget-content');       
           var editor = ace.edit(ui.newPanel[0].id);
-          editor.focus();
-          console.log(ui.newPanel[0].id  + '   ' + index)          
+          editor.focus();                  
         }});    
     // modal dialog init: custom buttons and a "close" callback resetting the form inside
     var dialog = $( "#dialog" ).dialog({
@@ -110,10 +109,21 @@ $(function() {
       });
  
     // close icon: removing the tab on click
-    tabs.delegate( "span.ui-icon-close", "click", function() {
-      var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
-      $( "#" + panelId ).remove();
-      tabs.tabs( "refresh" );
+    tabs.delegate( "span.ui-icon-close", "click", function(event) {
+    var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+    var temp=$( "#" + panelId ).next();
+    var temp1=$( "#" + panelId ).prev();
+    console.log(temp1);
+    $( "#" + panelId ).remove().empty();
+    tabs.tabs("refresh");
+    var numTabs= $('#tabs >ul >li').size();
+    if(numTabs===1)
+    {
+     temp.removeClass('ui-tabs-panel').removeClass('ui-widget-content');  
+     temp1.removeClass('ui-tabs-panel').removeClass('ui-widget-content')
+    }    
+    $("#tabs").tabs("option", "active", 0);
+    $("#tabs").tabs("option", "active", -1);
     });
  
     tabs.bind( "keyup", function( event ) {
