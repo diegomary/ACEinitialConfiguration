@@ -46,11 +46,12 @@ $(function() {
       tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
       tabCounter = 0;
       var tabs =$("#tabs").tabs({
-          activate:function(event,ui){
-          var index=ui.newTab.index();       
-          $('#tabs-'+index).removeClass('ui-tabs-panel').removeClass('ui-widget-content');
-          var editor = ace.edit('tabs-'+index);
+          activate:function(event,ui){          
+          var index=ui.newTab.index();                
+          $('#'+ ui.newPanel[0].id).removeClass('ui-tabs-panel').removeClass('ui-widget-content');       
+          var editor = ace.edit(ui.newPanel[0].id);
           editor.focus();
+          console.log(ui.newPanel[0].id  + '   ' + index)          
         }});    
     // modal dialog init: custom buttons and a "close" callback resetting the form inside
     var dialog = $( "#dialog" ).dialog({
@@ -90,10 +91,9 @@ $(function() {
       editor.getSession().setMode("ace/mode/" + tabLanguage.val());
       editor.setOptions({fontSize: tabfontSize.val()});
       editor.getSession().setValue(tabContent.val());   
-      tabs.tabs( "refresh" );     
-      var numTabs= $('#tabs >ul >li').size();   
-      $("#tabs").tabs("option", "active", numTabs-1);}
- 
+      tabs.tabs( "refresh" );
+      var numTabs= $('#tabs >ul >li').size();
+      $("#tabs").tabs("option", "active", numTabs-1);} 
       // Change Themes select
       $( "#tab_uithemes" ).change(function() {
         var themetoLoad=$("#tab_uithemes option:selected").val();      
