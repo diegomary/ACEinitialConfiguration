@@ -1,0 +1,25 @@
+<div>
+	<input type="text" ng-model="search.name" />
+	<div id='searchresults' ng-show='resultseffective'>
+		<table border="1">
+		 <thead>
+		  <tr>
+		   <th>Number</th>
+		   <th>Name</th>
+		   <th>Image</th>
+		  </tr>
+		 </thead>
+		 <tbody>
+
+
+ 		  <tr ng-repeat="major in (filteredmajor = (majorarcana | filter:search))">
+		 <!--  <tr ng-repeat="tarot in tarots | filter:search"> -->
+		   <td>{{major.number}}</td>
+		   <td>{{major.name}}</td>
+		   <td><img width=25% ng-src="{{major.imageurlUpright}}"></img></td>
+
+		  </tr>
+		 </tbody>
+		</table>
+	</div>
+</div>

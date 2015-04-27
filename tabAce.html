@@ -136,8 +136,16 @@ $(function(){
           tabs.tabs( "refresh" );
         }});
         var n=0;
-      var myTimer= setInterval(function(){ addTab('Tab' + n++,'this is a test','cobalt','javascript','18px')
-      if(n==10) clearInterval(myTimer);}, 1000);  
+            $.get("http://dmm888.com/bach/getjscode", function (data) {
+            addTab('Tab' + n++, JSON.stringify(data) ,'cobalt','javascript','18px')
+            $.getJSON("http://www.dmm888.com/bach/getflowers", function (data) {
+            addTab('Tab' + n++, JSON.stringify(data) ,'cobalt','javascript','18px')
+            $.get("http://dmm888.com/bach/GetCsharpCode", function (data) {
+            addTab('Tab' + n++, JSON.stringify(data) ,'cobalt','javascript','18px')         
+            });});});
+
+                  // var myTimer= setInterval(function(){ addTab('Tab' + n++,'this is a test','cobalt','javascript','18px')
+      // if(n==10) clearInterval(myTimer);}, 1000);  
     });
   </script>
 </head>

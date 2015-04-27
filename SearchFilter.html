@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="http://www.dmm888.com/Scripts/angularjs/angular.js"></script>
+
+</head>
+<!-- Controller name goes here -->
+<body ng-app="moduleSearch" ng-controller="DirectiveSampleController">
+
+<majorarcana-searcher></majorarcana-searcher>
+<script>
+angular.module('moduleSearch',[])
+.factory('TarotsService',function($http,$q){
+	var service={		
+		listmajorArcana:function(){
+			var deferred = $q.defer();
+			   //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('diegomary' + ':' + 'Atreius@62');
+			    $http.defaults.headers.common['Authorization'] = 'Basic ZGllZ29tYXJ5OkF0cmVpdXNANjI=';
+				$http.get('https://expressclusterq-diegomary-5.c9.io/majorarcanatarots', { cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function () {
+                    deferred.reject();
+                });
+                return deferred.promise;},
+        listminorArcana:function(){
+			var deferred = $q.defer();
+			   //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('diegomary' + ':' + 'Atreius@62');
+			    $http.defaults.headers.common['Authorization'] = 'Basic ZGllZ29tYXJ5OkF0cmVpdXNANjI=';
+				$http.get('https://expressclusterq-diegomary-5.c9.io/minorcanatarots', { cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function () {
+                    deferred.reject();
+                });
+                return deferred.promise;
+            },
+        singlemajortarot:function(idtosearch){
+        	var deferred = $q.defer();
+				$http.get('/major/' + idtosearch , { cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function () {
+                    deferred.reject();
+                });
+                return deferred.promise;
+        },
+        singleminortarot:function(idtosearch){
+        	var deferred = $q.defer();
+				$http.get('/minor/' + idtosearch , { cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function () {
+                    deferred.reject();
+                });
+                return deferred.promise;
+        },
+        updateMajorTarot:function(tarot){
+            	var deferred = $q.defer();
+				$http.post('/updatemajorarcana' ,tarot, {cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function (data, status, headers, config) {
+                    deferred.reject(data.message);
+                });
+                return deferred.promise;
+        },
+        updateMinorTarot:function(tarot){
+            	var deferred = $q.defer();
+				$http.post('/updateminorarcana' ,tarot, {cache: false }).success(function (data) {
+                deferred.resolve(data);
+                }).error(function (data, status, headers, config) {
+                    deferred.reject(data.message);
+                });
+                return deferred.promise;
+        }
+	};
+
+	return service;})
+.directive('majorarcanaSearcher', function() {
+    return {
+      restrict: 'AE',    
+      replace: true,
+      transclude: true,
+      scope: {valuetobind: '=', value1tobind: '='},
+      templateUrl: 'templates/tarotSearcher.html',
+      controller: ['$scope', 'TarotsService', '$http', function($scope, TarotsService, $http) {
+	  $scope.getmajorarcana=function(){		
+	  	var promise = TarotsService.listmajorArcana();
+		promise.then(
+					function (majorarcana) {
+						$scope.majorarcana=majorarcana;
+						startwatchingFiltering();
+					},
+					function(err) {$scope.AjaxError = err;}
+				);
+		};
+	   $scope.getmajorarcana();
+	   $scope.resultseffective=false;
+
+	   function startwatchingFiltering(){
+		$scope.$watch(
+                    "filteredmajor.length",
+                    function( newValue, oldValue ) {
+                    	if(newValue < $scope.majorarcana.length)
+                    	$scope.resultseffective=true;
+                    	else $scope.resultseffective=false;
+                        console.log('was: ' + oldValue + '  is now: ' + newValue);
+                    },true
+                );}
+      }],
+      link: function(scope, element, attrs, ctrl) {
+      // element is the component of the directive. In this case the div that wraps the two spans
+      // element.on('click', function () {element.html('You clicked me!');});
+      // element.on('mouseenter', function () {element.css('background-color', 'yellow');});
+      // element.on('mouseleave', function () {element.css('background-color', 'white');
+      // });
+      // W A R N I N G do not rely on jquery lite in Angular. but use FULL JQUERY 
+      // for searching inside the element.
+   //    console.log(attrs.valuetobind);
+   //    console.log(attrs.value1tobind);
+   //    console.log(element.find('#myId').css('color','purple'));
+	  // element.find('#mybutton').css('background-color','green').css('color','yellow');    	
+   //    console.log(scope.valuetobind + ' At link time');            
+    }
+    };
+  })
+.controller('DirectiveSampleController', ['$scope', 'TarotsService','$timeout', function ($scope, TarotsService,$timeout){ }])
+</script>
+</body>
+</html>
