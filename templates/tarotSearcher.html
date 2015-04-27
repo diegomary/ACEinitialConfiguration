@@ -1,23 +1,14 @@
-<div>
-	<input type="text" ng-model="search.name" />
-	<div id='searchresults' ng-show='resultseffective'>
-		<table border="1">
-		 <thead>
-		  <tr>
-		   <th>Number</th>
-		   <th>Name</th>
-		   <th>Image</th>
-		  </tr>
-		 </thead>
-		 <tbody>
- 		  <tr ng-repeat="card in (filteredmajor = (arcana | filter:search))">
-		 <!--  <tr ng-repeat="tarot in tarots | filter:search"> -->
-		   <td>{{card.number}}</td>
-		   <td>{{card.name}}</td>
-		   <td><img width=25% ng-src="{{card.imageurlUpright}}"></img></td>
-
-		  </tr>
-		 </tbody>
-		</table>
+<div style='width:342px'>	
+	<input type="text" ng-change='changesearchText()' ng-model="search.name" style='width:338px;font-size:medium;border-radius:4px' />
+	<div style='width:342px;overflow:hidden;margin-top:1%'>
+	<div ng-show='resultseffective' style='border-style:solid;border-color:black;border-width:thin;border-radius:4px;width:350px;height:150px;overflow-y:scroll;overflow-x:hidden'>
+	<div ng-repeat="card in (filteredarcana = (arcana | filter:search))" style='margin-top:1%;overflow-y:hidden;background-color:silver;margin-left:1%;font-family:verdana;font-size:small'>	
+		<div style='float:left; width:10%'>{{card.number}}</div>
+		<div style='float:left; width:60%'>{{card.name}}</div>
+		<div style='float:left; width:30%'>
+			<img style='width:80px' ng-src='{{card.imageurlUpright}}'></img>
+		</div>
+	</div>
+	</div>
 	</div>
 </div>

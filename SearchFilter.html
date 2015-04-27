@@ -5,125 +5,17 @@
 
 </head>
 <!-- Controller name goes here -->
-<body>
+<body  >
 
-<arcana-searcher ng-app="moduleSearch"  arcanas ='major'></arcana-searcher>
-<script>
-angular.module('moduleSearch',[])
-.factory('TarotsService',function($http,$q){
-	var service={		
-		listmajorArcana:function(){
-			var deferred = $q.defer();
-			   //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('diegomary' + ':' + 'Atreius@62');
-			    $http.defaults.headers.common['Authorization'] = 'Basic ZGllZ29tYXJ5OkF0cmVpdXNANjI=';
-				$http.get('https://expressclusterq-diegomary-5.c9.io/majorarcanatarots', { cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function () {
-                    deferred.reject();
-                });
-                return deferred.promise;},
-        listminorArcana:function(){
-			var deferred = $q.defer();
-			   //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('diegomary' + ':' + 'Atreius@62');
-			    $http.defaults.headers.common['Authorization'] = 'Basic ZGllZ29tYXJ5OkF0cmVpdXNANjI=';
-				$http.get('https://expressclusterq-diegomary-5.c9.io/minorcanatarots', { cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function () {
-                    deferred.reject();
-                });
-                return deferred.promise;
-            },
-        singlemajortarot:function(idtosearch){
-        	var deferred = $q.defer();
-				$http.get('/major/' + idtosearch , { cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function () {
-                    deferred.reject();
-                });
-                return deferred.promise;
-        },
-        singleminortarot:function(idtosearch){
-        	var deferred = $q.defer();
-				$http.get('/minor/' + idtosearch , { cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function () {
-                    deferred.reject();
-                });
-                return deferred.promise;
-        },
-        updateMajorTarot:function(tarot){
-            	var deferred = $q.defer();
-				$http.post('/updatemajorarcana' ,tarot, {cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function (data, status, headers, config) {
-                    deferred.reject(data.message);
-                });
-                return deferred.promise;
-        },
-        updateMinorTarot:function(tarot){
-            	var deferred = $q.defer();
-				$http.post('/updateminorarcana' ,tarot, {cache: false }).success(function (data) {
-                deferred.resolve(data);
-                }).error(function (data, status, headers, config) {
-                    deferred.reject(data.message);
-                });
-                return deferred.promise;
-        }
-	};
+<div ng-app="moduleSearch">
+<p>Minor arcana</p>
+<arcana-searcher   arcanas ='minor'></arcana-searcher>
 
-	return service;})
-.directive('arcanaSearcher', function() {
-    return {
-      restrict: 'AE',    
-      replace: true,
-      transclude: true,
-      scope: {valuetobind: '=', value1tobind: '=',arcanas: '@'},
-      templateUrl: 'templates/tarotSearcher.html',
-      controller: ['$scope', 'TarotsService', '$http', function($scope, TarotsService, $http) {
-      	
-
-	  $scope.getArcana=function(arcanaKind){
-	  if(arcanaKind ==='major')  var promise = TarotsService.listmajorArcana()
-	  else if(arcanaKind ==='minor')  var promise = TarotsService.listminorArcana()
-	  else {alert('Error'); return;} 	
-	  promise.then(function (arcana){
-						$scope.arcana = arcana;
-						startwatchingFiltering();
-					},function(err) {$scope.AjaxError = err;}
-				);};
+<p>Major arcana</p>
+<arcana-searcher   arcanas ='major'></arcana-searcher>
+</div>
 
 
-	  function startwatchingFiltering(){
-	  $scope.$watch("filteredmajor.length",function( newValue, oldValue ) {
-                    	if(newValue < $scope.arcana.length)
-                    	$scope.resultseffective=true;
-                    	else $scope.resultseffective=false;
-                        console.log('was: ' + oldValue + '  is now: ' + newValue);
-                    },true
-                );}
-
-	  
-      $scope.getArcana($scope.arcanas);
-	  $scope.resultseffective=false; 
-
-	   
-      }],
-      link: function(scope, element, attrs, ctrl) {
-      // element is the component of the directive. In this case the div that wraps the two spans
-      // element.on('click', function () {element.html('You clicked me!');});
-      // element.on('mouseenter', function () {element.css('background-color', 'yellow');});
-      // element.on('mouseleave', function () {element.css('background-color', 'white');
-      // });
-      // W A R N I N G do not rely on jquery lite in Angular. but use FULL JQUERY 
-      // for searching inside the element.
-   //    console.log(attrs.valuetobind);
-   //    console.log(attrs.value1tobind);
-   //    console.log(element.find('#myId').css('color','purple'));
-	  // element.find('#mybutton').css('background-color','green').css('color','yellow');    	
-   //    console.log(scope.valuetobind + ' At link time');            
-    }
-    };
-  })
-</script>
+<script src="/directives/searcher.js"></script>
 </body>
 </html>
