@@ -5,9 +5,9 @@
 
 </head>
 <!-- Controller name goes here -->
-<body ng-app="moduleSearch" ng-controller="DirectiveSampleController">
+<body>
 
-<majorarcana-searcher></majorarcana-searcher>
+<arcana-searcher ng-app="moduleSearch"  arcanas ='major'></arcana-searcher>
 <script>
 angular.module('moduleSearch',[])
 .factory('TarotsService',function($http,$q){
@@ -72,37 +72,41 @@ angular.module('moduleSearch',[])
 	};
 
 	return service;})
-.directive('majorarcanaSearcher', function() {
+.directive('arcanaSearcher', function() {
     return {
       restrict: 'AE',    
       replace: true,
       transclude: true,
-      scope: {valuetobind: '=', value1tobind: '='},
+      scope: {valuetobind: '=', value1tobind: '=',arcanas: '@'},
       templateUrl: 'templates/tarotSearcher.html',
       controller: ['$scope', 'TarotsService', '$http', function($scope, TarotsService, $http) {
-	  $scope.getmajorarcana=function(){		
-	  	var promise = TarotsService.listmajorArcana();
-		promise.then(
-					function (majorarcana) {
-						$scope.majorarcana=majorarcana;
-						startwatchingFiltering();
-					},
-					function(err) {$scope.AjaxError = err;}
-				);
-		};
-	   $scope.getmajorarcana();
-	   $scope.resultseffective=false;
+      	
 
-	   function startwatchingFiltering(){
-		$scope.$watch(
-                    "filteredmajor.length",
-                    function( newValue, oldValue ) {
-                    	if(newValue < $scope.majorarcana.length)
+	  $scope.getArcana=function(arcanaKind){
+	  if(arcanaKind ==='major')  var promise = TarotsService.listmajorArcana()
+	  else if(arcanaKind ==='minor')  var promise = TarotsService.listminorArcana()
+	  else {alert('Error'); return;} 	
+	  promise.then(function (arcana){
+						$scope.arcana = arcana;
+						startwatchingFiltering();
+					},function(err) {$scope.AjaxError = err;}
+				);};
+
+
+	  function startwatchingFiltering(){
+	  $scope.$watch("filteredmajor.length",function( newValue, oldValue ) {
+                    	if(newValue < $scope.arcana.length)
                     	$scope.resultseffective=true;
                     	else $scope.resultseffective=false;
                         console.log('was: ' + oldValue + '  is now: ' + newValue);
                     },true
                 );}
+
+	  
+      $scope.getArcana($scope.arcanas);
+	  $scope.resultseffective=false; 
+
+	   
       }],
       link: function(scope, element, attrs, ctrl) {
       // element is the component of the directive. In this case the div that wraps the two spans
@@ -120,7 +124,6 @@ angular.module('moduleSearch',[])
     }
     };
   })
-.controller('DirectiveSampleController', ['$scope', 'TarotsService','$timeout', function ($scope, TarotsService,$timeout){ }])
 </script>
 </body>
 </html>

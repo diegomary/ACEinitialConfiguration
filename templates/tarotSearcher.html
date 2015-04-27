@@ -10,13 +10,11 @@
 		  </tr>
 		 </thead>
 		 <tbody>
-
-
- 		  <tr ng-repeat="major in (filteredmajor = (majorarcana | filter:search))">
+ 		  <tr ng-repeat="card in (filteredmajor = (arcana | filter:search))">
 		 <!--  <tr ng-repeat="tarot in tarots | filter:search"> -->
-		   <td>{{major.number}}</td>
-		   <td>{{major.name}}</td>
-		   <td><img width=25% ng-src="{{major.imageurlUpright}}"></img></td>
+		   <td>{{card.number}}</td>
+		   <td>{{card.name}}</td>
+		   <td><img width=25% ng-src="{{card.imageurlUpright}}"></img></td>
 
 		  </tr>
 		 </tbody>
