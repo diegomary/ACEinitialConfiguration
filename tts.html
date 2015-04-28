@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="http://dmm888.com/Scripts/jquery/jquery-2.1.3.min.js"></script>
+        <script>
+String.prototype.replaceAt=function(index, character) {
+    return this.substr(0, index) + character + this.substr(index+character.length);
+}
+function Left(str, n){
+    if (n <= 0)
+        return "";
+    else if (n > String(str).length)
+        return str;
+    else
+        return String(str).substring(0,n);
+}
+function Right(str, n){
+    if (n <= 0)
+       return "";
+    else if (n > String(str).length)
+       return str;
+    else {
+       var iLen = String(str).length;
+       return String(str).substring(iLen, iLen - n);
+    }
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ */
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
+$(function(){
+var text="This is the way I tend to act when a problem is given to me to solve. The first thing I do is to evaluate the time it will take to me to solve the situation. Then after this part it is possible to start with the right pace and initiate all the necessary procedures that will lead to the solution of the problem"
+var marker=101
+var allChunks=[];
+while(text.length > marker)
+{
+    var res="";
+    while(res != ' ')
+    {
+        marker--;
+        res = text.charAt(marker);   
+    }
+    allChunks.push('http://translate.google.com/translate_tts?tl=en&q='+ (Left(text,marker)).trim());
+    text = text.substr(marker, text.length-marker);
+    marker= getRandomInt(95,101);
+}
+
+allChunks.push('http://translate.google.com/translate_tts?tl=en&q=' + text.trim());
+$.each(allChunks, function(index, value) {console.log(value)});
+
+
+
+var counter=0;
+$('#music').attr('src',allChunks[0]);
+$("#music").bind('ended', function(){
+counter++;
+if(counter > allChunks.length) return;
+$('#music').attr('src',allChunks[counter]);    
+});
+})
+
+
+       
+      
+</script>
+    </head>
+    <body>
+
+<audio id="music" controls autoplay  ></audio>
+       
+    </body>
+</html>
+
+
